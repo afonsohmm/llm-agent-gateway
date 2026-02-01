@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM python:3.11-slim as builder
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
@@ -9,9 +9,9 @@ RUN pip install poetry
 # Copy only pyproject.toml and poetry.lock to leverage Docker cache
 COPY pyproject.toml poetry.lock* ./
 
-# Install dependencies
+# Install dependencies (skip installing the project itself; source is copied later)
 RUN poetry config virtualenvs.create false && \
-    poetry install --only main --no-interaction --no-ansi
+    poetry install --only main --no-interaction --no-ansi --no-root
 
 # Stage 2: Create the final image
 FROM python:3.11-slim
